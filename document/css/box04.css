@@ -44,7 +44,7 @@ nav {
   line-height: 100px;
 }
 
-.basic .container { 
+.basic .container {
   display: flex;
   width: 1200px; /*표준 사이즈*/
   margin: 0 auto; /*자동으로 늘리기*/
@@ -60,5 +60,5 @@ nav {
 }
 
 .basic .icon {
-    margin: 0 0 0 30px
+  margin: 0 0 0 30px;
 }
