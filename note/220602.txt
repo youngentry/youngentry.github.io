@@ -1,3 +1,11 @@
+      section li:nth-child(1) {
+        color: #369;
+      }
+      section div:nth-child(2) {
+        /* 자식의 순서를 기준으로 하기 때문에 div:nth-childe(1)은 존재하지 않습니다. */
+        color: #ff0;
+      }
+
 폴더 파일확장명
 vscode 이 앱으로 열기 설정
 
