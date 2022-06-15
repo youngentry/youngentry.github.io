@@ -4,6 +4,11 @@ id는 보통 가장 바깥쪽 박스에 부여합니다. 여기저기 사용하�
 
 
 
+시안을 만들 때는 정보를 잘 전달할 수 있는 방법을 강구하는게 제일 우선됩니다.
+디자인은 나중입니다.
+
+
+
 html 가장 기본 형태입니다.
   <body>
     <div class="Wrap">
@@ -31,6 +36,7 @@ html 가장 기본 형태입니다.
   </body>
   
   
+  
 
 높이를 특정하는 것은 안 좋은 방법입니다. 반응형이 되었을 때 레이아웃이 엉망이 됩니다.
 배경을 차지하도록 할 때, absolute가 되었을 때를 제외하고는 높이를 주지 않습니다.
@@ -38,6 +44,8 @@ html 가장 기본 형태입니다.
 .main_slider figure {
   height: 600px;
 }
+
+
 
   
 silde를 만들 때 내용이 될 컨텐츠들은 figure안에 넣어 공통되는 속성을 관리합니다.
@@ -50,6 +58,7 @@ silde를 만들 때 내용이 될 컨텐츠들은 figure안에 넣어 공통되�
   
   
   
+  
 컬러에도 transition 적용이 가능합니다. 
 .main_slider figure.slick-current h2 {
   color: #f00;
@@ -58,19 +67,121 @@ silde를 만들 때 내용이 될 컨텐츠들은 figure안에 넣어 공통되�
   
   
   
+  
 슬라이드 초기화면에 afterChange를 적용하는 방법은 init afterChange 앞에 넣어주고 slick() 위로 올려주는 것입니다.
   $(".main_slider").on("init afterChange", function (e, s, c) {
-    $(".main_slider figure.slick-current")
-      .addClass("on")
-      .siblings()
-      .removeClass("on");
+    $(".main_slider figure.slick-current").addClass("on").siblings().removeClass("on");
   });
   
   
   
-비디오를 넣는 방법입니다. 기술적으로 움직임이 많도록 할 수 있습니다.
+  
+  
+  ★★★★★
+올라가는 슬라이드 번호를 구현합니다.
+원리는 background(01, 02, 03 이 일렬로 배치된 이미지)가 무한히 반복된다는 점을 이용합니다.
+.main_visual .num {
+  background-position-y: 0;
+  background-image: url(../img/num.png);
+}
+
+css에 입력할 때에는 -대신에 대문자로 입력합니다.    
+    $(".num").css({ background-position-y: -100 + "px" }); 이것은 js에서 오류가 생깁니다.
+    $(".num").css({ backgroundPositionY: -100 + "px" }); 카멜케이스로 대신하여 입력할 수 있습니다.
+
+배경의 높이(createNum)를 계속해서 높여줄 것입니다.
+$(function () {
+  var createNum = 0;
+
+  $(".main_slider").on("init afterChange", function (e, s, c) {
+    $(".main_slider figure.slick-current").addClass("on").siblings().removeClass("on");
+    $(".num").css({ backgroundPositionY: -100 * createNum + "px" });
+    $(".custom_dots li").eq(c).addClass("on").siblings().removeClass("on");
+    createNum++;  
+  });  
   
   
   
   
+  
+슬라이드 버튼을 커스텀 해봅니다. slide와 같은 레벨에 새로운 ul을 만들어 아이콘을 넣습니다.
+          <ul class="custom_dots">
+            <li><a href=""><i class="xi-bars"></i>Lorem, ipsum.</a></li>
+            <li><a href=""><i class="xi-heart"></i>Lorem, ipsum dolor.</a></li>
+            <li><a href=""><i class="xi-arrow-right"></i>Lorem.</a></li>
+          </ul>
+css 디자인을 한 뒤에, slick의 slickGoTo 펑션을 이용합니다. 
+a 를 클릭했을 때 원하는 슬라이드로 이동시킵니다.
+  $(".custom_dots a").on("click", function (e) {
+    e.preventDefault();
+    $(".main_slider").slick("slickGoTo", );
+  });
+  
+jquery를 쓸 때는 let 보다는 var를 쓰는 것이 jquery의 장점을 살리는 방법입니다.
+li의 index로 이동을 하도록 합니다.
+index는 $(this).parent().index(); 로 찾을 수 있습니다.
+  $(".custom_dots a").on("click", function (e) {
+    e.preventDefault();
+    var idx = $(this).parent().index();
+    $(".main_slider").slick("slickGoTo", idx);
+    $(".num").css({ backgroundPositionY: -100 * idx + "px" });
+    createNum = idx;
+  });
+createNum == idx 를 주어서 03에서 01로 + 방향으로 되돌아가지 않고 - 방향으로 계속 갈 수 있도록 합니다.
+
+
+
+
+  
+  
+슬라이드버튼에 게이지 효과를 추가합니다.
+우선 새로고침을 했을 때도 적용이 되도록 eq(0)에 on 클래스를 부여합니다.
+    $(".custom_dots li").eq(0).addClass("on");
+    $(".custom_dots li").eq(c).addClass("on").siblings().removeClass("on");
+가상요소선택자를 활용해 붉은 배경을 띄워줍니다.
+.main_visual .custom_dots li {
+  position: relative;
+  flex: 1;
+}
+.main_visual .custom_dots li ~ li {
+  border-left: 1px solid #fff;
+}
+.main_visual .custom_dots li a {
+  position: relative;
+  display: block;
+  padding: 10px;
+}
+.main_visual .custom_dots li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #f00;
+}
+.main_visual .custom_dots li.on::before {
+  width: 100%;
+  transition: 2s;
+}
+  
+  
+  
+  
+화살표 버튼을 커스텀하고 기능을 추가합니다.
+이전 슬라이드 slickPrev, 다음 슬라이드 slickNext, 멈추기 slickPause, 재생하기 slickPlay 입니다.
+$(".custom_arrow i:nth-child(1)").on("click", function () {
+  $(".main_slider").slick("slickPrev");
+});
+$(".custom_arrow i:nth-child(2)").on("click", function () {
+  $(".main_slider").slick("slickNext");
+});
+$(".custom_play i:nth-child(1)").on("click", function () {
+  $(".main_slider").slick("slickPause");
+});
+$(".custom_play i:nth-child(2)").on("click", function () {
+  $(".main_slider").slick("slickPlay");
+});
+  
+    
   
