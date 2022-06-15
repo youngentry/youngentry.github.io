@@ -1,0 +1,76 @@
+Wrap은 overflow: hidden; 으로 스크롤 바를 없애는 역할을 할 수 있습니다.
+
+id는 보통 가장 바깥쪽 박스에 부여합니다. 여기저기 사용하면 시스템에 부하를 많이 줍니다.
+
+
+
+html 가장 기본 형태입니다.
+  <body>
+    <div class="Wrap">
+      <header id=" header">
+        <div class="container">
+          <h1>
+            <a href="/">
+              <img src="../img/logo.png" alt="" />
+            </a>
+          </h1>
+          <nav class="gnb">
+            <ul>
+              <li><a href="">MENU01</a></li>
+              <li><a href="">MENU02</a></li>
+              <li><a href="">MENU03</a></li>
+              <li><a href="">MENU04</a></li>
+              <li><a href="">MENU05</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <main id="main" role="main"></main>
+      <footer id="footer"></footer>
+    </div>
+  </body>
+  
+  
+
+높이를 특정하는 것은 안 좋은 방법입니다. 반응형이 되었을 때 레이아웃이 엉망이 됩니다.
+배경을 차지하도록 할 때, absolute가 되었을 때를 제외하고는 높이를 주지 않습니다.
+슬라이더 안에 들어갈 이미지에 높이를 주는 것이 한 예시입니다.
+.main_slider figure {
+  height: 600px;
+}
+
+  
+silde를 만들 때 내용이 될 컨텐츠들은 figure안에 넣어 공통되는 속성을 관리합니다.
+.main_slider figure {
+  height: 600px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+  
+  
+  
+컬러에도 transition 적용이 가능합니다. 
+.main_slider figure.slick-current h2 {
+  color: #f00;
+  transition: 2s;
+}
+  
+  
+  
+슬라이드 초기화면에 afterChange를 적용하는 방법은 init afterChange 앞에 넣어주고 slick() 위로 올려주는 것입니다.
+  $(".main_slider").on("init afterChange", function (e, s, c) {
+    $(".main_slider figure.slick-current")
+      .addClass("on")
+      .siblings()
+      .removeClass("on");
+  });
+  
+  
+  
+비디오를 넣는 방법입니다. 기술적으로 움직임이 많도록 할 수 있습니다.
+  
+  
+  
+  
+  
