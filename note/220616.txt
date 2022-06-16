@@ -24,7 +24,7 @@ autoplay는 비디오 자동재생입니다.
           <video src="../img/movie01.mp4" autoplay></video>
 muted는 소리 없애기 입니다.
           <video src="../img/movie01.mp4" autoplay muted></video>
-playsinline는 아이폰이나 사파리에서 새 창으로 열리는 것을 방지합니다.
+playsinline은 아이폰이나 사파리에서 새 창으로 열리는 것을 방지합니다.
           <video src="../img/movie01.mp4" autoplay muted playsinline></video>
 
 
